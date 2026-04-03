@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f5f3ee">
+  <title>SimiAPP | Acceso</title>
+  <style>
+    :root {
+      --bg: #f5f3ee;
+      --bg-accent: #e8e1d4;
+      --surface: rgba(255, 255, 255, 0.84);
+      --surface-strong: rgba(255, 255, 255, 0.96);
+      --text: #111111;
+      --muted: #5c5a55;
+      --line: rgba(17, 17, 17, 0.08);
+      --shadow: 0 24px 80px rgba(20, 20, 20, 0.12);
+      --primary: #0f3d34;
+      --primary-contrast: #f8f7f2;
+      --secondary: #ffffff;
+      --secondary-text: #111111;
+      --ok: #0c6b4f;
+      --warn: #8c5a00;
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max: 1040px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(15, 61, 52, 0.10), transparent 28%),
+        radial-gradient(circle at 80% 15%, rgba(140, 90, 0, 0.08), transparent 24%),
+        linear-gradient(180deg, var(--bg), #fbfaf7 56%, #f2ede4 100%);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      pointer-events: none;
+      border-radius: 999px;
+      filter: blur(20px);
+      opacity: 0.65;
+      z-index: 0;
+    }
+
+    body::before {
+      width: 320px;
+      height: 320px;
+      top: -110px;
+      right: -90px;
+      background: rgba(15, 61, 52, 0.10);
+    }
+
+    body::after {
+      width: 260px;
+      height: 260px;
+      left: -90px;
+      bottom: -100px;
+      background: rgba(140, 90, 0, 0.08);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(100%, var(--max));
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .hero,
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+    }
+
+    .hero {
+      padding: clamp(28px, 4vw, 44px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 540px;
+    }
+
+    .panel {
+      padding: 26px;
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(15, 61, 52, 0.08);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--ok);
+      box-shadow: 0 0 0 6px rgba(12, 107, 79, 0.12);
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      max-width: 12ch;
+      font-size: clamp(3rem, 7vw, 6.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.06em;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 54ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.4vw, 1.12rem);
+      line-height: 1.6;
+    }
+
+    .status {
+      margin-top: 26px;
+      padding: 16px 18px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+    }
+
+    .status strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+    }
+
+    .status p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: -0.01em;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+      will-change: transform;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible {
+      outline: 3px solid rgba(15, 61, 52, 0.18);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-contrast);
+      box-shadow: 0 14px 26px rgba(15, 61, 52, 0.18);
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--secondary-text);
+      border-color: var(--line);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .meta-card {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+    }
+
+    .meta-card span {
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .meta-card strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .checks {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .check {
+      padding: 14px 15px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--line);
+    }
+
+    .check strong {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .check span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .fineprint {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      word-break: break-all;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 960px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 16px;
+      }
+
+      .hero,
+      .panel {
+        border-radius: 24px;
+      }
+
+      h1 {
+        max-width: 10ch;
+        font-size: clamp(2.8rem, 16vw, 4.4rem);
+      }
+
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="shell" aria-labelledby="title">
+      <article class="hero">
+        <div>
+          <span class="eyebrow">SimiAPP acceso publico</span>
+          <h1 id="title">Acceso directo, sin friccion</h1>
+          <p class="lead">
+            Esta pagina intenta abrir SimiAPP automaticamente. Si el dispositivo ya puede llegar a la
+            aplicacion, te lleva directo. Si no, te envia a instalar Tailscale para completar el acceso.
+          </p>
+
+          <div class="status" id="status">
+            <strong>Verificando acceso</strong>
+            <p id="status-text">Comprobando si la aplicacion esta disponible desde este dispositivo...</p>
+          </div>
+
+          <div class="actions">
+            <a class="btn btn-primary" id="open-app" href="#" rel="nofollow">Abrir SimiAPP</a>
+            <a class="btn btn-secondary" id="install-app" href="#" target="_blank" rel="noopener">Instalar Tailscale</a>
+          </div>
+        </div>
+
+        <div class="meta-grid" aria-label="Resumen">
+          <div class="meta-card">
+            <span>Ruta destino</span>
+            <strong class="mono" id="app-url-label">Cargando...</strong>
+          </div>
+          <div class="meta-card">
+            <span>Instalacion</span>
+            <strong class="mono" id="install-url-label">Cargando...</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <div>
+          <h2>Como decide a donde ir</h2>
+          <p>
+            Primero prueba la conexion a SimiAPP. Si responde, redirige a la aplicacion.
+            Si no responde, abre la descarga de Tailscale segun el dispositivo.
+          </p>
+        </div>
+
+        <div class="checks">
+          <div class="check">
+            <strong>Si SimiAPP esta accesible</strong>
+            <span>Te lleva a la pantalla principal sin pasos extra.</span>
+          </div>
+          <div class="check">
+            <strong>Si falta Tailscale</strong>
+            <span>Te envia a la instalacion correcta para Android, iPhone o escritorio.</span>
+          </div>
+          <div class="check">
+            <strong>Si la red tarda</strong>
+            <span>Se muestra el estado actual y puedes usar los botones manualmente.</span>
+          </div>
+        </div>
+
+        <div class="fineprint">
+          Esta landing es autonoma y esta pensada para subirse a cualquier hosting estatico.
+          Si luego cambia la URL publica de SimiAPP, actualiza las constantes al inicio del archivo.
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const DEFAULT_CONFIG = {
+      localHomeUrls: [
+        'http://127.0.0.1:3000/home',
+        'http://localhost:3000/home',
+        'http://100.112.48.88:3000/home'
+      ],
+      localProbeUrls: [
+        'http://127.0.0.1:3000/healthz',
+        'http://localhost:3000/healthz',
+        'http://100.112.48.88:3000/healthz'
+      ],
+      appUrl: 'https://mauro-central.tail96d3e8.ts.net/home',
+      probeUrl: 'https://mauro-central.tail96d3e8.ts.net/healthz',
+      install: {
+        android: 'https://tailscale.com/download/android',
+        ios: 'https://tailscale.com/download/ios',
+        desktop: 'https://tailscale.com/download'
+      },
+      probeTimeoutMs: 3500,
+      redirectDelayMs: 450
+    };
+
+    const CONFIG = buildConfig();
+
+    const appUrlLabel = document.getElementById('app-url-label');
+    const installUrlLabel = document.getElementById('install-url-label');
+    const statusText = document.getElementById('status-text');
+    const statusBox = document.getElementById('status');
+    const openAppButton = document.getElementById('open-app');
+    const installAppButton = document.getElementById('install-app');
+
+    const platform = detectPlatform();
+    const installUrl = getInstallUrl(platform);
+
+    appUrlLabel.textContent = CONFIG.appUrl;
+    installUrlLabel.textContent = installUrl;
+    openAppButton.href = CONFIG.appUrl;
+    installAppButton.href = installUrl;
+
+    window.addEventListener('load', () => {
+      void autoRoute();
+    });
+
+    async function autoRoute() {
+      setStatus('Verificando acceso', 'Comprobando primero la app local y despues el acceso publico...');
+
+      const localTarget = await resolveReachableTarget(CONFIG.localProbeUrls, CONFIG.localHomeUrls);
+      if (localTarget) {
+        setStatus('App local lista', 'Abriendo SimiAPP instalada en este equipo...');
+        window.setTimeout(() => {
+          window.location.replace(localTarget);
+        }, CONFIG.redirectDelayMs);
+        return;
+      }
+
+      const publicTarget = await resolveReachableTarget([CONFIG.probeUrl], [CONFIG.appUrl]);
+      if (publicTarget) {
+        setStatus('Acceso publico confirmado', 'Abriendo SimiAPP por la URL publica...');
+        window.setTimeout(() => {
+          window.location.replace(publicTarget);
+        }, CONFIG.redirectDelayMs);
+        return;
+      }
+
+      setStatus('Instalacion requerida', 'No se detecta acceso a SimiAPP. Abriendo Tailscale...');
+      window.setTimeout(() => {
+        window.location.replace(installUrl);
+      }, CONFIG.redirectDelayMs);
+    }
+
+    async function resolveReachableTarget(probeUrls, targetUrls) {
+      const probes = Array.isArray(probeUrls) ? probeUrls : [];
+      const targets = Array.isArray(targetUrls) ? targetUrls : [];
+      const count = Math.min(probes.length, targets.length);
+
+      for (let index = 0; index < count; index += 1) {
+        const probeUrl = probes[index];
+        const targetUrl = targets[index];
+        if (!probeUrl || !targetUrl) continue;
+        if (await isReachable(probeUrl)) {
+          return targetUrl;
+        }
+      }
+
+      return '';
+    }
+
+    async function isReachable(url) {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), CONFIG.probeTimeoutMs);
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: controller.signal
+        });
+        return Boolean(response);
+      } catch (error) {
+        return false;
+      } finally {
+        window.clearTimeout(timeout);
+      }
+    }
+
+    function setStatus(title, body) {
+      if (statusBox) {
+        statusBox.dataset.state = title.toLowerCase().replace(/\s+/g, '-');
+      }
+      if (statusText) {
+        statusText.textContent = body;
+      }
+    }
+
+    function buildConfig() {
+      const params = new URLSearchParams(window.location.search);
+      const localHomeUrls = getParamUrlList(params, ['local', 'localHome'], DEFAULT_CONFIG.localHomeUrls);
+      const localProbeUrls = getParamUrlList(params, ['localProbe'], DEFAULT_CONFIG.localProbeUrls);
+      const appUrl = getParamUrl(params, ['app', 'open', 'home']) || DEFAULT_CONFIG.appUrl;
+      const probeUrl = getParamUrl(params, ['probe', 'check']) || DEFAULT_CONFIG.probeUrl;
+      const androidInstall = getParamUrl(params, ['android']) || DEFAULT_CONFIG.install.android;
+      const iosInstall = getParamUrl(params, ['ios']) || DEFAULT_CONFIG.install.ios;
+      const desktopInstall = getParamUrl(params, ['desktop', 'pc']) || DEFAULT_CONFIG.install.desktop;
+      const probeTimeoutMs = getParamNumber(params, ['timeout', 'probeTimeout'], DEFAULT_CONFIG.probeTimeoutMs);
+      const redirectDelayMs = getParamNumber(params, ['redirectDelay'], DEFAULT_CONFIG.redirectDelayMs);
+
+      return {
+        localHomeUrls,
+        localProbeUrls,
+        appUrl,
+        probeUrl,
+        install: {
+          android: androidInstall,
+          ios: iosInstall,
+          desktop: desktopInstall
+        },
+        probeTimeoutMs,
+        redirectDelayMs
+      };
+    }
+
+    function getParamUrl(params, keys) {
+      for (const key of keys) {
+        const value = params.get(key);
+        if (!value) continue;
+        if (isSafeHttpUrl(value)) return value;
+      }
+      return '';
+    }
+
+    function getParamUrlList(params, keys, fallback) {
+      for (const key of keys) {
+        const value = params.get(key);
+        if (!value) continue;
+        const parsed = value
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
+          .filter((item) => isSafeHttpUrl(item));
+        if (parsed.length) {
+          return parsed;
+        }
+      }
+      return Array.isArray(fallback) ? fallback : [];
+    }
+
+    function getParamNumber(params, keys, fallback) {
+      for (const key of keys) {
+        const value = Number(params.get(key));
+        if (Number.isFinite(value) && value > 0) {
+          return value;
+        }
+      }
+      return fallback;
+    }
+
+    function isSafeHttpUrl(value) {
+      try {
+        const parsed = new URL(value, window.location.href);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function detectPlatform() {
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.includes('android')) return 'android';
+      if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) return 'ios';
+      return 'desktop';
+    }
+
+    function getInstallUrl(currentPlatform) {
+      if (currentPlatform === 'android') return CONFIG.install.android;
+      if (currentPlatform === 'ios') return CONFIG.install.ios;
+      return CONFIG.install.desktop;
+    }
+  </script>
+</body>
+</html>
